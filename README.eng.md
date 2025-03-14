@@ -70,7 +70,7 @@ alembic upgrade head
 
 ### 🚀 Run server
 ```bash
-uvicorn app.server:app --host 0.0.0.0 --port 8000
+uvicorn app.server:api --host 0.0.0.0 --port 8000
 ```
 ### 🚀 Run production server
 It is a better practice to write down in entrypoint.sh and run from there

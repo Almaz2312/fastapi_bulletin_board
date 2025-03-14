@@ -4,7 +4,7 @@
 Это сервис **'Доска Объявлений'** написанный на FastAPI.
 
 ## 🛠️ Стек технологий
-- 🐍 Python 3.x
+- 🐍 Python 3.11.9
 - 🔹 FastAPI
 - 🗄️ PostgreSQL
 - 🗄️ Redis

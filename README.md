@@ -1,5 +1,5 @@
 # Шаблон FastAPI - Гайд
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/Almaz2312/fastapi_bulletin_board/-/blob/master/README.eng.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/Almaz2312/fastapi_bulletin_board/blob/master/README.eng.md)
 ## 📌 Описание
 Это сервис **'Доска Объявлений'** написанный на FastAPI.
 

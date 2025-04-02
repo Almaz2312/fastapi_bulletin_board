@@ -37,7 +37,7 @@ class AdvertisementRepository:
         return {"result": "Deleted successfully"}
 
     async def update_instance(self, model: Type[Base], field: InstrumentedAttribute, value: Any, data: dict):
-        query = update(model).where(field == value).values(**data)
+        query = update(model).where(field == value).values(**data).returning(model)
         result = await self.db.execute(query)
         await self.db.commit()
-        return result.mappings().all()
+        return result.scalar_one_or_none()

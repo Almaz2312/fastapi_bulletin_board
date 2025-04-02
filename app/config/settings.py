@@ -1,6 +1,11 @@
+import os.path
+from pathlib import Path
 from typing import Optional
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 class Settings(BaseSettings):
@@ -18,12 +23,17 @@ class Settings(BaseSettings):
     POSTGRES_PORT: str
     POSTGRES_DB: str
     CORS_ALLOWED_ORIGINS: list
+    MEDIA_URL: str
+    MEDIA_ROOT: str
 
     REDIS_HOST: Optional[str]
     REDIS_PORT: Optional[str]
     REDIS_USER: Optional[str] = None
     REDIS_PASSWORD: Optional[str] = None
     REDIS_DB: Optional[str] = None
+
+    CELERY_RESULT_BACKEND: str
+    CELERY_BROKER_URL: str
 
     SECRET_KEY: str
     ALGORITHM: str

@@ -23,7 +23,7 @@ class UserRepository:
         return result.scalar_one_or_none()
 
     async def create_user(self, data: UserRegistrationSchema):
-        user_data = data.dict()
+        user_data = data.model_dump()
         password = user_data.pop("password")
         confirm_password = user_data.pop("confirm_password")
         if password != confirm_password:

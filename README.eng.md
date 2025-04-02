@@ -54,7 +54,6 @@ cp .env.example .env
 ```
 
 ### 📊 Use, work with alembic migrations
-#### It is necessary to commit your migrations in order to avoid problems with migrations record in database abd their application
 > to automatically generate alembic:
 ```bash
 alembic revision --autogenerate -m "your message"

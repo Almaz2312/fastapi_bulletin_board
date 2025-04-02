@@ -20,6 +20,22 @@ def include_router(app: FastAPI):
     app.include_router(api_router)
 
 
+def add_middleware(app: FastAPI):
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    app.add_middleware(
+        AuthenticationMiddleware,
+        backend=BaseAuthentication(),
+        on_error=on_error,
+    )
+
+
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
     yield
@@ -62,19 +78,8 @@ def start_application():
         version=settings.PROJECT_VERSION,
         debug=settings.DEBUG
     )
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-    app.add_middleware(
-        AuthenticationMiddleware,
-        backend=BaseAuthentication(),
-        on_error=on_error,
-    )
 
+    add_middleware(app)
     include_router(app)
     use_bearer_schema(app)
     add_exception_handler(app)

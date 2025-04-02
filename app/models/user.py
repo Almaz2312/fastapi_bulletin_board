@@ -1,5 +1,7 @@
+from typing import List, Optional
+
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base_class import Base
 
@@ -12,3 +14,5 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(default=True)
     full_name: Mapped[str] = mapped_column(nullable=False, index=True)
     phone_number: Mapped[str] = mapped_column(unique=True, nullable=True, index=True, default=None)
+
+    advertisements: Mapped[Optional[List["Advertisement"]]] = relationship(back_populates="user")

@@ -14,7 +14,7 @@ from app.models.user import User
 
 @celery_app.task
 def update_ads_views():
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.run_until_complete(_update_ads_views())
     loop.close()

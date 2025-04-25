@@ -1,13 +1,25 @@
 from celery import Celery
+from celery.schedules import crontab
 
 from app.config.settings import settings
 
 
 def setup_celery():
     celery = Celery(
-        settings.APP_NAME,
+        settings.PROJECT_NAME,
         backend=settings.CELERY_RESULT_BACKEND,
         broker=settings.CELERY_BROKER_URL,
     )
-    celery.conf.update(app.config)
+
     return celery
+
+
+celery_app = setup_celery()
+celery_app.autodiscover_tasks(["app.celery"])
+
+celery_app.conf.beat_schedule = {
+    "flush_adn_save_redis_data": {
+        "task": "app.celery.tasks.update_ads_views",
+        "schedule": crontab()
+    }
+}

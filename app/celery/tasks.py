@@ -3,17 +3,20 @@ from celery import shared_task
 from celery.schedules import crontab
 from sqlalchemy import select, update, case
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
+from app.celery import celery_app
 from app.db.session import sessionmanager
 from app.db.redis import redis_db
 from app.models.advertisement import Advertisement
+from app.models.user import User
 
 
-@shared_task
+@celery_app.task
 def update_ads_views():
     loop = asyncio.get_event_loop()
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(update_ads_views())
+    loop.run_until_complete(_update_ads_views())
     loop.close()
 
 
@@ -34,7 +37,7 @@ async def _update_ads_views():
                 return
 
             await bulk_update_ads_views(views_ads, session)
-
+            await redis_db.flushdb()
         except Exception:
             await session.rollback()
             raise

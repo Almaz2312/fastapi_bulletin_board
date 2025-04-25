@@ -1,6 +1,6 @@
-from typing import Optional, List
+from typing import Optional, List, Type
 
-from pydantic import BaseModel, ConfigDict, condecimal
+from pydantic import BaseModel, ConfigDict, condecimal, model_validator
 
 from app.schemas.user import ProfileSchema
 
@@ -10,14 +10,14 @@ class CategorySchema(BaseModel):
 
     id: Optional[int] = None
     name: str
-    subcategories: Optional[list] = None
+    sub_categories: Optional[List["SubCategorySchema"]] = None
 
 
 class CreateCategorySchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     name: str
-    subcategories: Optional["CreateSubCategorySchema"] = None
+    sub_categories: Optional["CreateSubCategorySchema"] = None
 
 
 class SubCategorySchema(BaseModel):
@@ -25,7 +25,6 @@ class SubCategorySchema(BaseModel):
 
     id: Optional[int] = None
     name: str
-    category: Optional[CategorySchema] = None
 
 
 class CreateSubCategorySchema(BaseModel):
@@ -40,7 +39,7 @@ class AdvertisementSchema(BaseModel):
 
     id: int
     user: Optional[ProfileSchema]
-    subcategory: Optional[SubCategorySchema]
+    sub_category: Optional[SubCategorySchema]
     location: str
     price: condecimal(ge=0, decimal_places=2)
     active: bool
@@ -53,7 +52,7 @@ class AdvertisementSchema(BaseModel):
 
 class CreateAdvertisementSchema(BaseModel):
     user_id: int
-    subcategory_id: int
+    sub_category_id: int
     location: Optional[str] = None
     price: Optional[int] = 0
     active: Optional[bool] = True

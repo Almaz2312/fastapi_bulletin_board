@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from app.celery.tasks import update_ads_views
 from app.db.session import get_db_session
 from app.models.advertisement import Category, Advertisement, SubCategory
 from app.schemas.advertisement import CategorySchema, SubCategorySchema, AdvertisementSchema, CreateSubCategorySchema, \
@@ -76,6 +77,7 @@ async def create_ad(data: AdvertisementSchema, db_session: AsyncSession = Depend
 @router.get("/{ad_id}", response_model=AdvertisementSchema)
 async def get_ad(ad_id: int, db_session: AsyncSession = Depends(get_db_session)):
     service = AdvertisementService(db_session)
+    update_ads_views.delay()
     return await service.get_instance(Advertisement, Advertisement.id, ad_id)
 
 

@@ -10,7 +10,7 @@ class Category(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     name: Mapped[str] = mapped_column(nullable=False, index=True)
 
-    sub_categories: Mapped[Optional[List["SubCategory"]]] = relationship(back_populates="category")
+    sub_categories: Mapped[Optional[List["SubCategory"]]] = relationship(back_populates="category", lazy="selectin")
 
 
 class SubCategory(Base):
@@ -38,7 +38,7 @@ class Advertisement(Base):
     contact_phone: Mapped[str]
     views: Mapped[int] = mapped_column(default=0)
 
-    images: Mapped[Optional[List["AdImage"]]] = relationship("AdImage", back_populates="advertisement")
+    images: Mapped[Optional[List["AdImage"]]] = relationship(back_populates="advertisement", lazy="selectin")
 
 
 class AdImage(Base):

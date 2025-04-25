@@ -82,7 +82,7 @@ def start_application():
     add_middleware(app)
     include_router(app)
     use_bearer_schema(app)
-    add_exception_handler(app)
+    # add_exception_handler(app)
     return app
 
 

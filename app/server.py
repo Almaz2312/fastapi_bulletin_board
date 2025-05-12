@@ -14,6 +14,7 @@ from app.config.settings import settings
 from app.generics.exceptions import validation_exception_handler
 from app.db.session import sessionmanager
 from app.middleware.authentication import BaseAuthentication
+from app.middleware.view_counter import ViewCounterMiddleware
 
 
 def include_router(app: FastAPI):
@@ -34,6 +35,7 @@ def add_middleware(app: FastAPI):
         backend=BaseAuthentication(),
         on_error=on_error,
     )
+    app.add_middleware(ViewCounterMiddleware)
 
 
 @contextlib.asynccontextmanager
@@ -82,7 +84,7 @@ def start_application():
     add_middleware(app)
     include_router(app)
     use_bearer_schema(app)
-    # add_exception_handler(app)
+    add_exception_handler(app)
     return app
 
 

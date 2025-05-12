@@ -14,17 +14,14 @@ from app.models.user import User
 
 @celery_app.task
 def update_ads_views():
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
+    loop = asyncio.get_event_loop()
     loop.run_until_complete(_update_ads_views())
-    loop.close()
 
 
 async def _update_ads_views():
     async with sessionmanager.session() as session:
         try:
-
-            #Get all ads from db
+            # Get all ads from db
             query = select(Advertisement.id).where(Advertisement.active.is_(True))
             result = await session.execute(query)
             ads = result.scalars().all()
@@ -34,9 +31,9 @@ async def _update_ads_views():
             # Get view counts from redis
             views_ads = await get_redis_views(ads)
             if not views_ads:
-                return
+                pass
 
-            await bulk_update_ads_views(views_ads, session)
+            await bulk_update_ads_views({3: 5, 2: 10}, session)
             await redis_db.flushdb()
         except Exception:
             await session.rollback()
@@ -54,14 +51,14 @@ async def get_redis_views(ads_ids: list) -> dict:
 
 
 async def bulk_update_ads_views(view_ads: dict, session: AsyncSession):
-    query = update(Advertisement)\
-        .where(Advertisement.id.in_(view_ads.keys()))\
-        .values(
-        views=Advertisement.views + case({
-            ad_id: count for ad_id, count in view_ads.items()},     # Need to be a mapping
-            value=Advertisement.id,     # Specify row to check for update
-            else_=Advertisement.views or 0
-        )
+    case_expr = case(
+        *[
+            (Advertisement.id == ad_id, Advertisement.views + count) for ad_id, count in view_ads.items()],
+            else_=Advertisement.views
     )
+    query = update(Advertisement) \
+        .where(Advertisement.id.in_(view_ads.keys())) \
+        .values(views=case_expr)
+
     await session.execute(query)
     await session.commit()

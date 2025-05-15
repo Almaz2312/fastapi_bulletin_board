@@ -1,0 +1,52 @@
+services:
+  gns_inform:
+    image: fastapi-app
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    command: sh -c "uvicorn app.server:app --host 0.0.0.0 --port 8080"
+    ports:
+      - "8080:8080"
+    networks:
+      - net
+
+  celery:
+    tty: true
+    image: celery-app
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    command: sh -c "celery_app -A celery_app worker -l info"
+    depends_on:
+      - redis
+    networks:
+      - net
+
+  celery-beat:
+    image: celery-beat-app
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    command: sh -c "celery_app -A celery_app beat -l info"
+    depends_on:
+      - redis
+    networks:
+      - net
+
+  redis:
+    image: redis
+    restart: always
+    command: redis-server
+    ports:
+      - 6378:6379
+    volumes:
+      - redis_data:/var/lib/redis/data
+    networks:
+      - net
+
+volumes:
+  redis_data:
+
+networks:
+  net: {}

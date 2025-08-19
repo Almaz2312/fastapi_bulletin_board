@@ -1,4 +1,4 @@
-# FastAPI template - Guide
+# FastAPI Bulletin Board
 [![ru](https://img.shields.io/badge/lang-ru-red.svg)](https://github.com/Almaz2312/fastapi_bulletin_board/blob/master/README.md)
 ## Dependencies
 

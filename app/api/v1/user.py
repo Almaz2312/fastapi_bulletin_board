@@ -21,7 +21,7 @@ async def register_user(data: UserRegistrationSchema, db_session: AsyncSession =
     return result
 
 
-@router.get("/", response_model=List[ProfileSchema], dependencies=[Depends(PermissionMiddleware(IsAuthenticated))])
+@router.get("/", response_model=List[ProfileSchema])
 async def get_users(db_session: AsyncSession = Depends(get_db_session)):
     service = UserService(db_session)
     return await service.get_users()

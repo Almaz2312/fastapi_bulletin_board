@@ -4,9 +4,10 @@ version = "0.1.0"
 description = ""
 authors = ["Almaz Durusaliev <adurusaliev@megacom.kg>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 fastapi = "^0.115.5"
 sqlalchemy = "^2.0.36"
 python-dotenv = "^1.0.1"
@@ -22,6 +23,7 @@ python-multipart = "^0.0.20"
 pydantic-settings = "^2.8.1"
 uvicorn = "^0.34.0"
 celery = {extras = ["redis"], version = "^5.4.0"}
+httpx = "^0.28.1"
 
 
 [tool.poetry.group.linters.dependencies]
@@ -30,6 +32,13 @@ mypy = "^1.13.0"
 black = "^24.10.0"
 isort = "^5.13.2"
 ruff = "^0.7.4"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+factory-boy = "^3.3.3"
+aiosqlite = "^0.21.0"
+pytest-asyncio = "^1.1.0"
 
 [build-system]
 requires = ["poetry-core"]

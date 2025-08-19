@@ -17,7 +17,6 @@ class CreateCategorySchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     name: str
-    sub_categories: Optional["CreateSubCategorySchema"] = None
 
 
 class SubCategorySchema(BaseModel):
@@ -25,6 +24,7 @@ class SubCategorySchema(BaseModel):
 
     id: Optional[int] = None
     name: str
+    category_id: Optional[int] = None
 
 
 class CreateSubCategorySchema(BaseModel):

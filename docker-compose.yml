@@ -17,7 +17,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.local
-    command: sh -c "celery_app -A celery_app worker -l info"
+    command: sh -c "celery -A celery_app worker -l info"
     depends_on:
       - redis
     networks:
@@ -28,7 +28,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.local
-    command: sh -c "celery_app -A celery_app beat -l info"
+    command: sh -c "celery -A celery_app beat -l info"
     depends_on:
       - redis
     networks:

@@ -15,11 +15,13 @@ def setup_celery():
 
 
 celery_app = setup_celery()
-celery_app.autodiscover_tasks(["app.celery_app"])
+celery_app.conf.timezone = "Asia/Bishkek"
+celery_app.conf.enable_utc = False
+celery_app.autodiscover_tasks(["celery_app"])
 
 celery_app.conf.beat_schedule = {
     "flush_adn_save_redis_data": {
-        "task": "app.celery_app.tasks.update_ads_views",
+        "task": "celery_app.tasks.update_ads_views",
         "schedule": crontab()
     }
 }

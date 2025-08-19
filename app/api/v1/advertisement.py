@@ -1,14 +1,14 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, BackgroundTasks
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from app.celery.tasks import update_ads_views
+from celery_app.tasks import update_ads_views
 from app.db.session import get_db_session
 from app.models.advertisement import Category, Advertisement, SubCategory
 from app.schemas.advertisement import CategorySchema, SubCategorySchema, AdvertisementSchema, CreateSubCategorySchema, \
-    CreateCategorySchema, UpdateAdvertisementSchema
+    CreateCategorySchema, UpdateAdvertisementSchema, CreateAdvertisementSchema
 from app.services.advertisement import AdvertisementService
 
 router = APIRouter()
@@ -20,7 +20,7 @@ async def get_category_list(db_session: AsyncSession = Depends(get_db_session)):
     return await service.get_instances(Category)
 
 
-@router.post("/category", response_model=CategorySchema)
+@router.post("/category", response_model=CategorySchema, status_code=status.HTTP_201_CREATED)
 async def create_category(data: CreateCategorySchema, db_session: AsyncSession = Depends(get_db_session)):
     service = AdvertisementService(db_session)
     return await service.create_instance(Category, data)
@@ -44,13 +44,13 @@ async def get_subcategory_list(db_session: AsyncSession = Depends(get_db_session
     return await service.get_instances(SubCategory)
 
 
-@router.post("/subcategory", response_model=SubCategorySchema)
+@router.post("/subcategory", response_model=SubCategorySchema, status_code=status.HTTP_201_CREATED)
 async def create_subcategory(data: CreateSubCategorySchema, db_session: AsyncSession = Depends(get_db_session)):
     service = AdvertisementService(db_session)
     return await service.create_instance(SubCategory, data)
 
 
-@router.get("/subcategory/{subcategory_id}", response_model=CategorySchema)
+@router.get("/subcategory/{subcategory_id}", response_model=SubCategorySchema)
 async def get_category(subcategory_id: int, db_session: AsyncSession = Depends(get_db_session)):
     service = AdvertisementService(db_session)
     return await service.get_instance(SubCategory, SubCategory.id, subcategory_id)
@@ -68,8 +68,8 @@ async def get_all_ads(db_session: AsyncSession = Depends(get_db_session)):
     return await service.get_instances(Advertisement)
 
 
-@router.post("/", response_model=AdvertisementSchema)
-async def create_ad(data: AdvertisementSchema, db_session: AsyncSession = Depends(get_db_session)):
+@router.post("/", response_model=AdvertisementSchema, status_code=status.HTTP_201_CREATED)
+async def create_ad(data: CreateAdvertisementSchema, db_session: AsyncSession = Depends(get_db_session)):
     service = AdvertisementService(db_session)
     return await service.create_instance(Advertisement, data)
 

@@ -32,7 +32,7 @@ class UserRepository:
                 detail={"error": "Passwords do not match"},
             )
         user_data.update({"hashed_password": Hasher.get_password_hash(password)})
-
+        print("save hashed password", user_data.get("hashed_password"))
         new_user = User(**user_data)
         self.db.add(new_user)
         return new_user

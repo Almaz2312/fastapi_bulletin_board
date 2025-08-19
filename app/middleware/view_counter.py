@@ -1,13 +1,12 @@
+from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 
 from app.db.redis import redis_db
 
 
-class ViewCounterMiddleware:
-    def __init__(self, app):
-        self.app = app
+class ViewCounterMiddleware(BaseHTTPMiddleware):
 
-    async def __call__(self, request: Request, call_next):
+    async def dispatch(self, request: Request, call_next):
         x_forwarder_for = request.headers.get("X-Forwarded-For")
         if x_forwarder_for:
             ip_address = x_forwarder_for.split(",")[0]

@@ -11,7 +11,8 @@ from app.models.advertisement import Advertisement
 @celery_app.task
 def update_ads_views():
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(_update_ads_views())
+    result = loop.run_until_complete(_update_ads_views())
+    return result
 
 
 async def _update_ads_views():

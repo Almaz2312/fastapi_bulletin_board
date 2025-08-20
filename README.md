@@ -4,10 +4,11 @@
 Это сервис **'Доска Объявлений'** написанный на FastAPI.
 
 ## 🛠️ Стек технологий
-- 🐍 Python 3.11.9
+- 🐍 Python 3.12
 - 🔹 FastAPI
+- ⚙️ Celery + Redis
 - 🗄️ PostgreSQL
-- 🗄️ Redis
+- 🗄️ Redis as Cache
 - 🐳 Docker
 - 🔗 Git для ведения версионного контроля
 ---

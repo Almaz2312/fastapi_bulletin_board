@@ -6,7 +6,7 @@
 Service **'Bulletin Board'** is written using FastAPI.
 
 ## 🛠️ Stack
-- 🐍 Python 3.11.9
+- 🐍 Python 3.12
 - 🔹 FastAPI
 - 🗄️ PostgreSQL
 - 🗄️ Redis

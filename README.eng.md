@@ -53,6 +53,13 @@ Alternatively you can copy from .env.example
 cp .env.example .env
 ```
 
+### 📊Pytest
+Use `pytest` to run tests
+
+```bash
+pytest
+```
+
 ### 📊 Use, work with alembic migrations
 > to automatically generate alembic:
 ```bash

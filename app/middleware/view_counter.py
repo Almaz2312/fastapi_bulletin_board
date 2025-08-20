@@ -15,13 +15,16 @@ class ViewCounterMiddleware(BaseHTTPMiddleware):
 
         response = await call_next(request)
 
-        if "api/v1/advertisements/ads/" not in str(request.url.path) or request.method != "GET":
+        if (
+            "api/v1/advertisements/ads/" not in str(request.url.path)
+            or request.method != "GET"
+        ):
             return response
 
         ads_id = request.url.path.split("/")[-1]
         if not ads_id.isdigit():
             return response
 
-        redis_db.sadd(ads_id, ip_address)
-        await redis_db.aclose()
+        await redis_db.sadd(ads_id, ip_address)
+        await redis_db.close()
         return response

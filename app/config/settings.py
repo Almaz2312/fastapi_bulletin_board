@@ -1,9 +1,7 @@
-import os.path
 from pathlib import Path
 from typing import Optional
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -27,10 +25,10 @@ class Settings(BaseSettings):
     MEDIA_ROOT: str
 
     REDIS_HOST: Optional[str]
-    REDIS_PORT: Optional[str]
+    REDIS_PORT: Optional[int]
     REDIS_USER: Optional[str] = None
     REDIS_PASSWORD: Optional[str] = None
-    REDIS_DB: Optional[str] = None
+    REDIS_DB: Optional[int] = None
 
     CELERY_RESULT_BACKEND: str
     CELERY_BROKER_URL: str
@@ -42,8 +40,10 @@ class Settings(BaseSettings):
 
     @property
     def DATABASE_URL(self) -> str:
-        return (f"postgresql+asyncpg://{self.POSTGRES_USER}:{str(self.POSTGRES_PASSWORD)}@{self.POSTGRES_HOST}:"
-                f"{self.POSTGRES_PORT}/{self.POSTGRES_DB}")
+        return (
+            f"postgresql+asyncpg://{self.POSTGRES_USER}:{str(self.POSTGRES_PASSWORD)}@{self.POSTGRES_HOST}:"
+            f"{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        )
 
     @property
     def REDIS_URL(self) -> str:

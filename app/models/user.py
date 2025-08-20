@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List, Optional
 
 from sqlalchemy import String
@@ -13,6 +15,10 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(String(length=255), nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True)
     full_name: Mapped[str] = mapped_column(nullable=False, index=True)
-    phone_number: Mapped[str] = mapped_column(unique=True, nullable=True, index=True, default=None)
+    phone_number: Mapped[str] = mapped_column(
+        unique=True, nullable=True, index=True, default=None
+    )
 
-    advertisements: Mapped[Optional[List["Advertisement"]]] = relationship(back_populates="user")
+    advertisements: Mapped[Optional[List["Advertisement"]]] = relationship(  # type: ignore
+        back_populates="user"
+    )

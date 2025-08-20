@@ -2,16 +2,21 @@ import contextlib
 from typing import Any, AsyncGenerator, AsyncIterator, Dict
 
 from sqlalchemy.ext.asyncio import (
-    AsyncSession,
     AsyncConnection,
+    AsyncSession,
     async_sessionmaker,
-    create_async_engine, AsyncEngine
+    create_async_engine,
 )
 
 from app.config.settings import settings
 
 SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL
-kwargs = {"echo": settings.ECHO, "pool_pre_ping": True, "pool_recycle": 3600, "max_overflow": 100}
+kwargs = {
+    "echo": settings.ECHO,
+    "pool_pre_ping": True,
+    "pool_recycle": 3600,
+    "max_overflow": 100,
+}
 
 
 class DatabaseSessionManager:

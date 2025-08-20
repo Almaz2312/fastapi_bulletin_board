@@ -1,11 +1,12 @@
 import asyncio
-from sqlalchemy import select, update, case
+
+from sqlalchemy import Update, case, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from celery_app import celery_app
-from app.db.session import sessionmanager
 from app.db.redis import redis_db
+from app.db.session import sessionmanager
 from app.models.advertisement import Advertisement
+from celery_app import celery_app
 
 
 @celery_app.task
@@ -50,12 +51,16 @@ async def get_redis_views(ads_ids: list) -> dict:
 async def bulk_update_ads_views(view_ads: dict, session: AsyncSession):
     case_expr = case(
         *[
-            (Advertisement.id == ad_id, Advertisement.views + count) for ad_id, count in view_ads.items()],
-            else_=Advertisement.views
+            (Advertisement.id == ad_id, Advertisement.views + count)
+            for ad_id, count in view_ads.items()
+        ],
+        else_=Advertisement.views
     )
-    query = update(Advertisement) \
-        .where(Advertisement.id.in_(view_ads.keys())) \
+    query: Update = (
+        update(Advertisement)  # type: ignore
+        .where(Advertisement.id.in_(view_ads.keys()))
         .values(views=case_expr)
+    )
 
     await session.execute(query)
     await session.commit()

@@ -1,8 +1,8 @@
 from typing import Any
 
 from fastapi import HTTPException
-from jose import jwt, JWTError
-from sqlalchemy import select
+from jose import JWTError, jwt
+from sqlalchemy import Result, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import InstrumentedAttribute
 from starlette import status
@@ -19,7 +19,7 @@ class UserRepository:
 
     async def get_user_by_field(self, field: InstrumentedAttribute, value: Any) -> User:
         query = select(User).where(field == value)
-        result = await self.db.execute(query)
+        result: Result = await self.db.execute(query)
         return result.scalar_one_or_none()
 
     async def create_user(self, data: UserRegistrationSchema):
@@ -32,7 +32,6 @@ class UserRepository:
                 detail={"error": "Passwords do not match"},
             )
         user_data.update({"hashed_password": Hasher.get_password_hash(password)})
-        print("save hashed password", user_data.get("hashed_password"))
         new_user = User(**user_data)
         self.db.add(new_user)
         return new_user
@@ -59,7 +58,9 @@ class UserRepository:
         )
 
         try:
-            decoded_token = jwt.decode(token, key=settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+            decoded_token = jwt.decode(
+                token, key=settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+            )
             username = decoded_token.get("sub")
 
             if not username:

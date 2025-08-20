@@ -1,15 +1,12 @@
 import re
 from typing import Any
 
-from sqlalchemy.orm import as_declarative, declared_attr
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, declared_attr
 
 
-@as_declarative()
-class Base:
+class Base(DeclarativeBase):
     id: Any
-    __name__: str
 
-    @declared_attr
+    @declared_attr  # type: ignore
     def __tablename__(cls) -> str:
-        return re.sub(r'(?<!^)(?=[A-Z][a-z])', '_', cls.__name__).lower()
+        return re.sub(r"(?<!^)(?=[A-Z][a-z])", "_", cls.__name__).lower()
